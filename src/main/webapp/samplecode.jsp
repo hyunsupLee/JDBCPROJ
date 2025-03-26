@@ -10,6 +10,11 @@
 <head>
 <meta charset="UTF-8">
 <title>Sample Test Code Page</title>
+<style type="text/css">
+body{
+	text-align: center;
+}
+</style>
 </head>
 <body>
 <jsp:include page="/topnavigator.jsp"></jsp:include>
@@ -23,17 +28,20 @@
 	pageContext.setAttribute("thumImglist", thumImglist);
 	
 	// 스크립 트릿내에서 세션정보 이용 시 아래와 같이 getAttribute  이용
-	long user_id = Long.parseLong( (String) session.getAttribute("user_id") ) ;
-	String grade = (String) session.getAttribute("grade");
-	String name = (String) session.getAttribute("name");
-	out.println("스크립트릿에서 세션정보 호출 <br>");
-	out.println( String.format("user_id: %d , grade:%s , name:%s ", user_id, grade , name ) );
-	out.println( "<hr>");
+	if( session.getAttribute("user_id") != null )
+	{
+		long user_id = Long.parseLong( (String) session.getAttribute("user_id") ) ;
+		String grade = (String) session.getAttribute("grade");
+		String name = (String) session.getAttribute("name");
+		out.println("스크립트릿에서 세션정보 호출 <br>");
+		out.println( String.format("user_id: %d , grade:%s , name:%s ", user_id, grade , name ) );
+		out.println( "<hr>");
+	}
 	
 %>
 <h5>Context-Param값 읽어오기</h5>
 OracleDriver: ${OracleDriver}<br>
-conpath: ${conpath}<br>
+approot: ${approot}<br>
 
 <hr>
 userId: if 로그인 조건 (문자열비교)
@@ -55,6 +63,29 @@ thumImglist: 반복문 AND case 조건문 테스트
 <br>
 
 <%-- jstl 반복문 & case 조건테스트 --%>
+<c:forEach var="imgfile" items="${thumImglist}" varStatus="loop">
+
+	count:${loop.count}<br>
+	<c:choose>
+	
+		<c:when test="${loop.first}">
+			<h1>imgstart</h1>
+			<img width="100" src="${thumImgDir}${imgfile}" ><br>
+		</c:when>
+		
+		<c:when test="${loop.last}">
+			<img width="100" src="${thumImgDir}${imgfile}" ><br>
+			<h1>imgEnd</h1>
+		</c:when>
+		
+		<c:otherwise>
+			<img width="100" src="${thumImgDir}${imgfile}" ><br>
+		</c:otherwise>
+	
+	</c:choose>
+	
+</c:forEach>
+
 <c:forEach var="imgfile" items="${thumImglist}" varStatus="loop">
 
 	count:${loop.count}<br>

@@ -11,6 +11,13 @@
 	String OracleDriver = application.getInitParameter("oracleDriver");
 	application.setAttribute("OracleDriver", OracleDriver);
 	
+	// 리소스 이미지 디렉토리 
+	if(application.getAttribute("approot") == null )
+	{
+		String approot = application.getContextPath() +"/";
+		application.setAttribute("approot", approot);
+	}
+	
 	// 상품썸네일이미지 디렉토리 
 	if(application.getAttribute("thumImgDir") == null )
 	{
@@ -38,11 +45,11 @@
 		
 	}
 	// 로그인 세션 정보저장
-	//session.setAttribute("user_id", "1");
+	session.setAttribute("user_id", "1");
 	//session.setAttribute("grade", "admin");
-	//session.setAttribute("grade", "customer");
+	session.setAttribute("grade", "customer");
 	//session.setAttribute("name", "jdbcproj");
-	//session.setAttribute("name", "obama");
+	session.setAttribute("name", "obama");
 	
 	//session.getAttribute("user_id");
 	//session.getAttribute("grade");
@@ -167,8 +174,26 @@
 
 </style>
 
+<script>
+  function logout() {
+    fetch("logout.jsp", { method: "POST" }) // 비동기 POST 요청
+      .then(response => response.text())
+      .then(result => {
+        if (result.trim() === "success") {
+          alert("로그아웃 되었습니다.");
+          // 페이지 새로고침 또는 다른 동작 수행
+          location.reload(); // 페이지 새로고침
+        } else {
+          alert("로그아웃에 실패했습니다.");
+        }
+      })
+      .catch(err => console.error("Error:", err));
+  }
+</script>
+
+
 <div id="topnavigation_container">
-	<div class="logo"><a href="/main.jsp"><img width="100px" src="${resource}mlblogo.png"/></a></div>
+	<div class="logo"><a href="${approot}main.jsp"><img width="100px" src="${resource}mlblogo.png"/></a></div>
 	<div class="navibox_container">
 	
 		<div class="usermenu">
@@ -178,15 +203,15 @@
 
 			<c:if test="${not empty user_id && grade ne 'admin'}">
 				<span>${name} 님 <span style="color:red">일반사용자</span> 계정 입니다. </span>
-				<a href=""><span class="link_white">logOut</span></a>
-				<a href="/cart.jsp">
+				<button onclick="logout()"><span class="link_white">logOut</span></button>
+				<a href="${approot}cart.jsp">
 				<span class="material-symbols-outlined" style="position: relative; top: 5px ; margin-left:15px">shopping_bag</span>
 				</a>
 			</c:if>
 
 			<c:if test="${empty user_id}">
-				<a href="/join.jsp"><span class="link_white">join</span></a> | 
-				<a href="/log.jsp"><span class="link_white">logIn</span></a>
+				<a href="${approot}join.jsp"><span class="link_white">join</span></a> | 
+				<a href="${approot}log.jsp"><span class="link_white">logIn</span></a>
 				<span class="material-symbols-outlined" style="position: relative; top: 5px ; margin-left:15px;visibility:hidden">shopping_bag</span>
 			</c:if>
 		
@@ -213,16 +238,16 @@
 		<c:if test="${grade ne 'admin'}">
 			<div class="camenu_container">
 			<div class="camenu">
-				<a class="link_white" href="/productcategory.jsp?ca_id=BallCap">BallCap</a>
+				<a class="link_white" href="${approot}productcategory.jsp?ca_id=BallCap">BallCap</a>
 			</div>
 			<div class="camenu">
-  				<a class="link_white" href="/productcategory.jsp?ca_id=Hat">Hat</a>
+  				<a class="link_white" href="${approot}productcategory.jsp?ca_id=Hat">Hat</a>
   			</div>
   			<div class="camenu">
-  				<a class="link_white" href="/productcategory.jsp?ca_id=Season">Season</a>
+  				<a class="link_white" href="${approot}productcategory.jsp?ca_id=Season">Season</a>
   			</div>
   			<div class="camenu">
-  				<a class="link_white" href="/productcategory.jsp?ca_id=Beanie">Beanie</a>
+  				<a class="link_white" href="${approot}productcategory.jsp?ca_id=Beanie">Beanie</a>
   			</div>
 		</div>
 		</c:if>

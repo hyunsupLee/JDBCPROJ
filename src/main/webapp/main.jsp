@@ -10,6 +10,11 @@
 <head>
 <meta charset="UTF-8">
 <title>Sample Test Code Page</title>
+<style>
+body{
+	text-align: center;
+}
+</style>
 </head>
 <body>
 <jsp:include page="/topnavigator.jsp"></jsp:include>
